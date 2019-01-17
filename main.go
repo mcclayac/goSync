@@ -9,6 +9,7 @@ import (
 	"os"
 	"poetry"
 	"strconv"
+	"time"
 )
 
 /*
@@ -66,6 +67,8 @@ func poemHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	log.SetFlags(log.Lmicroseconds)
 
+	startTime := time.Now()
+
 	var configFilenameString string
 
 	flag.StringVar(&configFilenameString, "conf", "config",
@@ -107,6 +110,13 @@ func main() {
 	}
 
 	fmt.Printf("%v\n\n", c)
+
+	//stopTime := time.Now()
+	//elapsed := time.Since(startTime)
+	elapsed := time.Now().Sub(startTime)
+	log.Printf("Loading took : %s \n", elapsed)
+
+	log.Printf("Started at %s \n", time.Now().Format(time.RFC1123))
 
 	http.HandleFunc(c.Route, poemHandler)
 	http.ListenAndServe(c.BindAddress, nil)
